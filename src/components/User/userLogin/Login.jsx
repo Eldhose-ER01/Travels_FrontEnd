@@ -7,7 +7,7 @@ import { addUser } from '../../../redux/userSlice';
 import {useForm} from "react-hook-form"
 import { useGoogleLogin } from "@react-oauth/google";
 import axios from 'axios';
-import toast from 'react-hot-toast';
+import { toast } from 'react-toastify';
 export default function Login() {
   const {
     register,
@@ -30,6 +30,8 @@ useEffect(() => {
 const googledata=async()=>{
   try {
     if (user) {
+      console.log("hiii");
+      
       const response=await axios
           .get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
               headers: {
@@ -37,9 +39,14 @@ const googledata=async()=>{
                   Accept: 'application/json'
               }
           })
-
+           
           const Gdetails=await googleLogin(response.data)
+        
+          
           if(Gdetails.data.success){
+            if(Gdetails.data.userDatas){
+
+           
 
            localStorage.setItem('usertoken', JSON.stringify(Gdetails.data.userDatas.token));
           dispatch(
@@ -49,11 +56,23 @@ const googledata=async()=>{
               token: Gdetails.data.userDatas.token,
             })
           );
+          toast.success("Login successfull")
           navigate('/');
-        }else if (Gdetails.data.Exit) {
-          toast.error("User Already Exists")
+        }else if (Gdetails.data.userData) {
+          
+          localStorage.setItem('usertoken', JSON.stringify(Gdetails.data.userData.token));
+          dispatch(
+            addUser({
+              id: Gdetails.data.userData.id,
+              username: Gdetails.data.userData.username,
+              token: Gdetails.data.userData.token,
+            })
+          )
+          toast.success("Login successfull")
+          navigate('/');
+          
         }
-
+      }
   }
   } catch (error) {
     console.log(error);

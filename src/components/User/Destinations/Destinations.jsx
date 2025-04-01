@@ -1,63 +1,109 @@
-import React from 'react'
-import UserNav from '../Usernav/UserNav'
+import UserNav from '../Usernav/UserNav';
 import Footer from '../Footer/Footer';
+import { FaCheck, FaTimes, FaClock, FaRupeeSign } from 'react-icons/fa';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { destinationpoint } from '../../../configure/user';
+import { useState, useEffect } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import { Navigation, Pagination } from 'swiper/modules';
 
 export default function Destinations() {
-    const cards = [
-       
-       
-        {
-          id: 5,
-          image: "https://content.skyscnr.com/m/54fc17957e073659/original/GettyImages-100654718.jpg",
-          title:"Calangute",
-          description: "This is a short description for card nghfdgd udjhgdfgjgh hufddjksk dfgdfgksgsgh hdfgyqguykhjsv hfdsjskgsgkj dhsfksgs sgkgsjg 1."
-        },
-        {
-          id: 6,
-          image: "https://www.tripplannersindia.com/assets/images/postimages/North_Goa_Baga_Beach.webp",
-          title:"Baga Beach",
-          description: "This is a short description for card nghfdgd udjhgdfgjgh hufddjksk dfgdfgksgsgh hdfgyqguykhjsv hfdsjskgsgkj dhsfksgs sgkgsjg 1."
-        },
-        {
-          id: 7,
-          image: "https://www.shutterstock.com/image-photo/anjuna-beach-famous-tourist-destination-600nw-2473265031.jpg",
-          title:"Anjuna Beach",
-          description: "This is a short description for card nghfdgd udjhgdfgjgh hufddjksk dfgdfgksgsgh hdfgyqguykhjsv hfdsjskgsgkj dhsfksgs sgkgsjg 1."
-        },
-        {
-          id: 8,
-          image: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/07/79/ce/e7/fort-aguada-candolim.jpg?w=800&h=500&s=1",
-          title:"Fort Aguada",
-          description: "This is a short description for card nghfdgd udjhgdfgjgh hufddjksk dfgdfgksgsgh hdfgyqguykhjsv hfdsjskgsgkj dhsfksgs sgkgsjg 1."
-        }
-      ];
-  return (
-   <>
-   <UserNav/>
+  const navigate = useNavigate();
+  const location = useLocation();
+  const districtName = location.state?.district;
+  
+  const [alldestinations, setAllDestinations] = useState([]);
+  const state = alldestinations.length > 0 ? alldestinations[0].state.statename : '';
 
-  {/* Cards Section */}
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 "> 
-          {cards.map((card) => (
-            <div key={card.id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:scale-105">
-              <img
-                src={card.image}
-                alt={card.title}
-                className="w-full h-48 object-cover "
-              />
-              <div className='text-center mt-2'>
-               <h1 className='font-semibold'>{card.title}</h1> 
+  const findDestinationPoint = async () => {
+    try {
+      const response = await destinationpoint(districtName);
+      if (response.data.success) {
+        setAllDestinations(response.data.destinations);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    findDestinationPoint();
+  }, []);
+
+  return (
+    <>
+      <UserNav />
+      <div className="w-full flex justify-center">
+        <div className="w-[93%] p-4">
+          <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">
+            Destinations<span className="text-green-600 pl-2">{state}</span> from <span className="text-green-600">{districtName}</span>
+          </h1>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {alldestinations.map((destination) => (
+              <div 
+                key={destination.id} 
+                className="bg-white rounded-lg shadow-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300 cursor-pointer w-full flex flex-col h-full"
+                onClick={() => navigate('/booking', { state: { destination } })}
+              >
+                <div className="p-4 flex-grow">
+                  <Swiper
+                    navigation
+                    pagination={{ clickable: true }}
+                    modules={[Navigation, Pagination]}
+                    className="h-64"
+                  >
+                    {destination.selectedImages.map((image, index) => (
+                      <SwiperSlide key={index}>
+                        <img src={`http://localhost:3001/Images/${image}`} alt="" className="w-full h-full object-cover rounded-md" />
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
+                  <h2 className="text-2xl font-semibold text-gray-800 mt-4 mb-2">{destination.destination}</h2>
+                  <p className="text-gray-600 mb-4 text-lg">{destination.description}</p>
+                  <div className="mb-4">
+                    <h3 className="font-medium text-gray-700 mb-2 text-lg">Includes:</h3>
+                    <ul className="space-y-1">
+                      {destination.include.map((item, index) => (
+                        <li key={index} className="flex items-center text-red-500 text-lg">
+                          <FaCheck className="mr-2 text-green-600" />
+                          <span className="text-gray-700">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="mb-4">
+                    <h3 className="font-medium text-gray-700 mb-2 text-lg">Not Includes:</h3>
+                    <ul className="space-y-1">
+                      {destination.notIncludes.map((item, index) => (
+                        <li key={index} className="flex items-center text-red-500 text-lg">
+                          <FaTimes className="mr-2" />
+                          <span className="text-gray-700">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+                <div className="p-4 border-t border-gray-200 bg-gray-50">
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center text-red-600 text-lg">
+                      <FaClock className="mr-2 text-green-500" />
+                      <span>{destination.duration} Hours</span>
+                    </div>
+                    <div className="flex items-center text-black font-bold text-xl">
+                      <FaRupeeSign className="mr-1" />
+                      <span>{destination.ticketPrice.toLocaleString()}</span>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="p-6">
-                <p className="text-gray-600">{card.description}</p>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
-      <div>
-        <Footer />
-      </div>
-   </>
-  )
+      <Footer />
+    </>
+  );
 }

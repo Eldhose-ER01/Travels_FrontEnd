@@ -7,11 +7,16 @@ import EditStatesandDistrict from '../pages/Admin/EditStatesandDistrict'
 import AddStatesAndDistrict from '../pages/Admin/AddStatesAndDistrict'
 import Destinations from '../pages/Admin/Destinations'
 import Finddestinations from '../pages/Admin/Finddestinations'
+import ProtectedAdminRoute from './ProtectAdminRoute'
+import Editdestination from '../pages/Admin/Editdestination'
 export default function Adminroutes() {
   return (
     <div>
       <Routes>
         <Route path='/login' element={<AdminLogin/>}/>
+        <Route element={<ProtectedAdminRoute/>}>
+  
+        
         <Route path='/'element={<AdminDashboard/>}/>
         <Route path='/users'element={<UsersList/>}/>
         <Route path='/statesdistrict'element={<FindStateandDistrict/>}/>
@@ -19,7 +24,8 @@ export default function Adminroutes() {
         <Route path='/editstates'element={<EditStatesandDistrict/>}/>
         <Route path='/destinations'element={<Destinations/>}/>
         <Route path='/finddestination'element={<Finddestinations/>}/>
-        
+        <Route path='/editdestination'element={<Editdestination/>}/>
+        </Route>
       </Routes>
     </div>
   )

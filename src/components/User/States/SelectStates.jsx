@@ -2,14 +2,14 @@ import { useState, useEffect } from 'react';
 import UserNav from '../Usernav/UserNav';
 import Footer from '../Footer/Footer';
 import { finddistrict } from '../../../configure/admin';
-
+import { useNavigate } from 'react-router-dom';
 export default function SelectStates() {
   const [states, setStates] = useState([]);
   const [filterdata, setFilterData] = useState([]);
   const [selectedState, setSelectedState] = useState(null); // Track selected button
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
-
+  const Navigate=useNavigate()
   const findDistrcitandstates = async () => {
     try {
       const response = await finddistrict();
@@ -33,6 +33,8 @@ export default function SelectStates() {
   const currentItems = filterdata.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(filterdata.length / itemsPerPage);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  
+
 
   useEffect(() => {
     findDistrcitandstates();
@@ -84,7 +86,7 @@ export default function SelectStates() {
                 <p className="text-gray-600">{state.districtdesc}</p>
               </div>
               <div className='flex flex-wrap justify-center mb-6'>
-                <button className='w-60 h-12 bg-black text-white font-semibold hover:bg-green-400 hover:text-black'>
+                <button className='w-60 h-12 bg-black text-white font-semibold hover:bg-green-400 hover:text-black' onClick={() => Navigate('/destinations', { state: { district: state.districtname } })}>
                   Select Now
                 </button>
               </div>

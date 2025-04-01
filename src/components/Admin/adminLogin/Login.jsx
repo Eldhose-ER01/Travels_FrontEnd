@@ -26,7 +26,9 @@ export default function Login() {
   try {
    const response=await adminLogin({datas})
    if(response.data.success){
-    localStorage.getItem("admintoken",JSON.stringify(response.data.admindetails))
+    console.log(response.data.admindetails);
+    
+    localStorage.setItem("admintoken",JSON.stringify(response.data.admindetails))
     dispatch(
       addUser({
         token:response.data.admindetails

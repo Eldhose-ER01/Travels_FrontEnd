@@ -75,6 +75,34 @@ const googleLogin=async(data)=>{
 
   }
 }
+
+const destinationpoint=async(distictname)=>{
+  try {
+    const response=await userAxiosInstance.get(`/destinationpoint?districtname=${distictname}`)
+    return response
+  } catch (error) {
+    console.log(error.message, "error form frontend");
+
+  }
+}
+const userProfile=async()=>{
+  try {
+    const response=await userAxiosInstance.get('/userprofile')
+    return response
+  } catch (error) {
+    console.log(error.message, "error form frontend");
+
+  }
+}
+const Editprofile=async(data)=>{
+  try {
+    const response=await userAxiosInstance.post('/editprofile',data)
+    return response
+  } catch (error) {
+    console.log(error.message, "error form frontend");
+
+  }
+}
   export{
     userSignup,
     Otpform,
@@ -83,5 +111,8 @@ const googleLogin=async(data)=>{
     ForgetPass,
     ForgetOtpsubmit,
     changepassword,
-    googleLogin
+    googleLogin,
+    destinationpoint,
+    userProfile,
+    Editprofile
   }

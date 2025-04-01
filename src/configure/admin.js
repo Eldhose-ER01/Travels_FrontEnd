@@ -117,3 +117,28 @@ export const finddistrict=async()=>{
         console.log(error);
     }
 }
+
+export const editdestination=async(data)=>{
+    try {
+        const response=await adminAxiosInstance.post('/editdestination',data,{
+            headers: {
+                "Content-Type": "multipart/form-data"
+              }
+        })
+        return response
+    } catch (error) {
+        console.log(error);
+        
+    }
+}
+
+export const Destinationdelete=async(id)=>{
+    try {
+        const response=await adminAxiosInstance.post('/deletedestination',{id})
+        return response
+    } catch (error) {
+        console.log(error);
+    }
+   
+}
+

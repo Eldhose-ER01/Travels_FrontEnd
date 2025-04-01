@@ -3,6 +3,7 @@ import { editStateAndDistrict } from "../../../configure/admin";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
+import AdminNav from "../adminDash/AdminNav";
 
 export default function EditStates() {
   const location = useLocation();
@@ -44,6 +45,10 @@ export default function EditStates() {
   };
 
   return (
+    <>
+   <div>
+    <AdminNav />
+   </div>
     <div className="flex justify-center sm:items-center h-screen flex-col">
       <h1 className="font-bold text-2xl text-center">Edit your States and Districts</h1>
       <div className="lg:w-[30%] md:w-[40%] sm:w-[50%] w-[90%] sm:mt-0 mt-9 bg-gray-400 flex flex-col rounded-md">
@@ -111,5 +116,6 @@ export default function EditStates() {
         </div>
       </div>
     </div>
+    </>
   );
 }

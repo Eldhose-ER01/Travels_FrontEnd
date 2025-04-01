@@ -1,7 +1,11 @@
 import UserNav from '../Usernav/UserNav';
 import Footer from '../Footer/Footer';
-
+import { useNavigate } from 'react-router-dom';
 export default function Userhome() {
+
+  const navigate=useNavigate()
+
+
   // Dummy data for cards
   const cards = [
     {
@@ -71,7 +75,7 @@ export default function Userhome() {
           <p className="text-base sm:text-lg md:text-xl lg:text-2xl mb-6 sm:mb-8">
             Discover the best experiences with us. Book now and enjoy exclusive offers!
           </p>
-            <button className='w-52 bg-sky-400 h-12 text-black font-semibold'>
+            <button className='w-52 bg-sky-400 hover:bg-red-600 hover:text-white  h-12 text-black font-semibold'onClick={()=>navigate("/selectstate")}>
               Book Now
           </button>
         </div>

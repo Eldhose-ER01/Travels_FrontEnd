@@ -1,16 +1,19 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { StateBlockORUnblock,findStateandDistrict,StateandDisrictDelete } from "../../../configure/admin";
+import { StateBlockORUnblock, findStateandDistrict, StateandDisrictDelete } from "../../../configure/admin";
+import AdminNav from "../adminDash/AdminNav";
+
 export default function FindStateDistricts() {
   const [States, setStates] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalpages] = useState(0);
   const [search, setSearch] = useState("");
-  const navigate=useNavigate()
-const handleClick=(index)=>{
-  setStates(index+1)
-}
+  const navigate = useNavigate();
+
+  const handleClick = (index) => {
+    setPage(index + 1);
+  };
 
   const StatesList = async () => {
     try {
@@ -36,7 +39,7 @@ const handleClick=(index)=>{
     }
   };
 
-  const statesdelete = async(id) => {
+  const statesdelete = async (id) => {
     try {
       const response = await StateandDisrictDelete(id);
       if (response.data.success) {
@@ -47,208 +50,170 @@ const handleClick=(index)=>{
     }
   };
 
-
   useEffect(() => {
     StatesList();
   }, [page, search]);
 
   return (
-    <div>
-      <div className="container mt-5 ml-32 pr-10">
-        <h1 className="font-normal font-serif flex justify-center text-3xl ">
-          States And Districts Lists
-        </h1>
-        <div className="flex justify-between mt-5">
-          <div>
-
-         
-          <input
-            className="h-10 w-52 ml-3 mt-5 bg-slate-200 border border-green-400 pl-1 rounded-md"
-            type="text"
-            name="search"
-            placeholder="Search Name here.."
-            value={search}
-            onChange={(e) => {
-              setSearch(e.target.value);
-            }}
-          />
-           </div>
-           <div className="mt-4 mr-2">
-           <Link to="/admin/addstates">
-  <button className="bg-black w-28 h-10 rounded-md text-green-300 font-bold hover:bg-blue-500 hover:text-white">
-    Add States
-  </button>
-</Link>
-</div>
-
-
+    <>
+  <AdminNav />
+    <div className="bg-gray-50 min-h-screen p-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold text-gray-800">
+            States and Districts Management
+          </h1>
+          <Link 
+            to="/admin/addstates"
+            className="bg-black hover:bg-green-400 text-green-400 hover:text-black font-medium py-2 px-4 rounded-md transition-colors"
+          >
+            Add States
+          </Link>
         </div>
-        
-        <div className="flex flex-col ">
-          <div className="overflow-x-auto">
-            <div className="p-1.5 w-full inline-block align-middle">
-              <div className="overflow-hidden border rounded-lg">
-                <table className="min-w-full divide-y divide-gray-200 ">
-                  <thead className="bg-gray-50 ">
-                    <tr>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-xs font-bold text-left text-gray-800 uppercase "
-                      >
-                        ID
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-xs font-bold text-left text-gray-800 uppercase "
-                      >
-                        States
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-xs font-bold text-left text-gray-800 uppercase "
-                      >
-                        Image
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-xs font-bold text-left text-gray-800 uppercase "
-                      >
-                        Districts
-                      </th>
-                      {/* <th
-                        scope="col"
-                        className="px-6 py-3 text-xs font-bold text-left text-gray-800 uppercase "
-                      >
-                        Description
-                      </th> */}
-                      <th
-                        scope="col"
-                        className="px-6 py-3  text-xs font-bold text-left text-gray-800 uppercase "
-                      >
-                        Status
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3  text-xs font-bold text-left text-gray-800 uppercase "
-                      >
-                        Update
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3  text-xs font-bold text-left text-gray-800 uppercase "
-                      >
-                        Delete
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200">
-                    {States.length >= 0 &&
-                      States.map((states, index) => {
-                        return (
-                          <tr key={states._id}>
-                            <td className="px-6 py-4 text-sm text-left font-medium text-gray-800 whitespace-nowrap">
-                              {index + 1}
-                            </td>
-                            <td className="px-6 py-4 text-sm text-gray-800 text-left whitespace-nowrap">
-                              {states.statename}
-                            </td>
-                            <td className="px-6 py-4 text-sm text-gray-800 text-left whitespace-nowrap">
-                            <img src={`http://localhost:3001/Images/${states.image}`} alt="" className="w-36 h-20"/> 
-                            </td>
-                            <td className="px-6 py-4 text-sm font-medium  text-left whitespace-nowrap">
-                              <a
-                                className="text-green-500 hover:text-green-700"
-                                href="#"
-                              >
-                                {states.districtname}
-                              </a>
-                            </td>
-                            {/* <td className="px-6 py-4 text-sm font-medium   text-left whitespace-nowrap">
-                              <a
-                                className="text-green-500 hover:text-green-700 w-12 h-12"
-                                href="#"
-                              >
-                                {states.districtdesc}
-                              </a>
-                            </td> */}
-                            <td className="px-6 py-4  text-left whitespace-nowrap">
-                              {states.status ? (
-                                <button
-                                  type="button"
-                                  className=" w-[100px] text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
-                                  onClick={() => {
-                                    bolockorunblock(states._id);
-                                  }}
-                                >
-                                  Block
-                                </button>
-                              ) : (
-                                <button
-                                  type="button"
-                                  className=" w-[100px] mtext-yellow-400 hover:text-white border border-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-yellow-300 dark:text-yellow-300 dark:hover:text-white dark:hover:bg-yellow-400 dark:focus:ring-yellow-900"
-                                  onClick={() => {
-                                    bolockorunblock(states._id);
-                                  }}
-                                >
-                                  Unblock
-                                </button>
-                              )}
-                            </td>
 
-                            <td className="px-6 py-4  text-left whitespace-nowrap">
-                             
-                             <button
-                               type="button"
-                               className=" w-[100px] bg-green-500 text-white hover:bg-blue-400 font-semibold rounded-lg text-sm px-5 py-2.5 text-center  me-2 mb-2"
-                            onClick={()=>{
-                              navigate('/admin/editstates',{
-                                state:states
-                              })
-                            } }>
-                               Edit
-                             </button>
-                          
-                         </td>
-
-                            <td className="px-6 py-4  text-left whitespace-nowrap">
-                             
-                                <button
-                                  type="button"
-                                  className=" w-[100px] bg-black text-white hover:bg-red-600 font-semibold rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
-                                  onClick={() => {
-                                    statesdelete(states._id);
-                                  }}
-                                >
-                                  Delete
-                                </button>
-                             
-                            </td>
-                          </tr>
-                        );
-                      })}
-                  </tbody>
-                </table>
-              </div>
-              <div className="max-w-[1600px] bg-gray-100 flex justify-center mt-3">
-                {totalPages > 0 &&
-                  [...Array(totalPages)].map((val, index) => (
-                    <button
-                      className={`${
-                        page === index + 1 ? "bg-black" : "bg-black"
-                      } py-2 px-4 rounded-md m-1 text-white ${
-                        page === index + 1 ? "font-bold" : "font-normal"
-                      } focus:outline-none focus:ring focus:ring-offset-2`}
-                      key={index}
-                      onClick={() => handleClick(index)}
-                    >
-                      {index + 1}
-                    </button>
-                  ))}
-              </div>
+        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+          <div className="flex justify-between items-center mb-6">
+            <div className="relative w-64">
+              <input
+                className="w-full h-10 pl-4 pr-10 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                type="text"
+                name="search"
+                placeholder="Search states..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              <svg
+                className="absolute right-3 top-2.5 h-5 w-5 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
             </div>
           </div>
+
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-100">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                    ID
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                    States
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                    Image
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                    Districts
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                    Update
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                    Delete
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {States.length > 0 ? (
+                  States.map((states, index) => (
+                    <tr key={states._id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                        {index + 1}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {states.statename}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <img 
+                          src={`http://localhost:3001/Images/${states.image}`} 
+                          alt={states.statename}
+                          className="w-24 h-16 object-cover rounded"
+                        />
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-600 font-medium">
+                        {states.districtname}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">
+                        {states.status ? (
+                          <button
+                            onClick={() => bolockorunblock(states._id)}
+                            className="px-4 py-2 bg-red-100 text-red-700 rounded-md hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors"
+                          >
+                            Block
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => bolockorunblock(states._id)}
+                            className="px-4 py-2 bg-yellow-100 text-yellow-700 rounded-md hover:bg-yellow-200 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 transition-colors"
+                          >
+                            Unblock
+                          </button>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">
+                        <button
+                          onClick={() => navigate('/admin/editstates', { state: states })}
+                          className="px-4 py-2 bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+                        >
+                          Edit
+                        </button>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm">
+                        <button
+                          onClick={() => statesdelete(states._id)}
+                          className="px-4 py-2 bg-red-100 text-red-700 rounded-md hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="7" className="px-6 py-4 text-center text-sm text-gray-500">
+                      No states found
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
+
+        {totalPages > 0 && (
+          <div className="flex justify-center">
+            <nav className="inline-flex rounded-md shadow-sm -space-x-px">
+              {[...Array(totalPages)].map((val, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleClick(index)}
+                  className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
+                    page === index + 1
+                      ? "z-10 bg-blue-50 border-blue-500 text-blue-600"
+                      : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
+                  }`}
+                >
+                  {index + 1}
+                </button>
+              ))}
+            </nav>
+          </div>
+        )}
       </div>
-      </div>
-      )
+    </div>
+    </>
+  );
 }

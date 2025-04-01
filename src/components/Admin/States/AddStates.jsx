@@ -3,6 +3,7 @@ import { AddStateAndistrict } from "../../../configure/admin";
 import toast from 'react-hot-toast';
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import AdminNav from "../adminDash/AdminNav";
 
 export default function AddStates() {
   const initialData = { statename: "", districtname: "", districtdesc: "" };
@@ -51,7 +52,9 @@ export default function AddStates() {
 
   return (
     <>
-  
+  <div>
+    <AdminNav />
+  </div>
     <div className="flex sm:justify-center items-center h-screen flex-col mt-20 sm:mt-0 ">
       <h1 className="font-bold text-2xl text-center ">Add States and Districts</h1>
       <div className="lg:w-[30%] md:w-[40%] sm:w-[50%] w-[90%] sm:mt-0 mt- sm:ml-0 bg-gray-400 flex flex-col rounded-md">

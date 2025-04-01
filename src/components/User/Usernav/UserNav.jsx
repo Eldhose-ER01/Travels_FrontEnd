@@ -1,9 +1,24 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
+import { useDispatch } from "react-redux";
+import { removeUser } from '../../../redux/userSlice';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'; // Updated import for v2
+import { useNavigate } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 const UserNav = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate=useNavigate()
+  const dispatch = useDispatch();
 
+  const tokens=localStorage.getItem("usertoken")
+  const homelogout = () => {
+    dispatch(removeUser());
+    localStorage.clear();
+    navigate("/login");
+  };
+  const logindata=()=>{
+    navigate('/login')
+  }
   return (
     <nav className="bg-white shadow-xl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -31,18 +46,24 @@ const UserNav = () => {
 
           {/* Right Side: Navigation Links (Desktop) */}
           <div className="hidden md:flex md:items-center md:space-x-8 ">
-            <a href="#" className="text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-md font-bold">
+            <Link to={"/"} className="text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-md font-bold">
               Home
-            </a>
-            <a href="#" className="text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-md font-bold">
+            </Link>
+            <Link to={"/selectstate"} className="text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-md font-bold">
               Places
-            </a>
-            <a href="#" className="text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-md font-bold">
+            </Link>
+            <Link to={"/userprofile"} className="text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-md font-bold">
               Profile
-            </a>
-            <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
+              </Link>
+            {tokens == null ? (
+            <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"onClick={logindata}>
               Login
             </button>
+             ) : (
+              <button className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"onClick={homelogout}>
+              Logout
+            </button>
+             )}
           </div>
         </div>
       </div>
@@ -51,18 +72,34 @@ const UserNav = () => {
       {isOpen && (
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <a href="#" className="block text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-base font-medium">
-              Home
-            </a>
-            <a href="#" className="block text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-base font-medium">
+           <Link to={"/"} className="block text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-base font-medium">
+           Home
+           </Link>
+             
+           
+             <Link to={"/selectstate"} className="block text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-base font-medium">
               Places
-            </a>
-            <a href="#" className="block text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-base font-medium">
+            </Link>
+            <Link to={"/userprofile"} className="block text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-base font-medium">
               Profile
-            </a>
-            <a href="#" className="block text-gray-800 hover:text-gray-600 px-3 py-2 rounded-md text-base font-medium">
-              Login
-            </a>
+            </Link>
+            {tokens == null ? (
+              <div className="md:ml-8 text-xl semibold md:my-0 my-7">
+                <Link to={"/login"} className="font-semibold">
+                  Login
+                </Link>
+              </div>
+            ) : (
+              <div className="md:ml-8 text-xl semibold md:my-0 my-7">
+                <Link
+                  to={"/login"}
+                  className="font-semibold"
+                  onClick={homelogout}
+                >
+                  Logout
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       )}

@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import { Destinations, finddistrict } from "../../../configure/admin";
+import AdminNav from "../adminDash/AdminNav";
 
 export default function Adddestination() {
+    const navigagte=useNavigate()
     const [formData, setFormData] = useState({
         destination: "",
         duration: "",
@@ -11,14 +14,26 @@ export default function Adddestination() {
         notIncludes: [""],
         ticketPrice: "",
         selectedImages: [],
-        district: "" // Add district field to formData
+        district: "", // district name
+        districtId: "" // district ID
     });
 
-    const [district, setDistrict] = useState([]); // Initialize district as an empty array
-
+    const [districts, setDistricts] = useState([]); // Changed variable name to be more descriptive
+    
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
+    };
+
+    const handleDistrictChange = (e) => {
+        const selectedDistrictId = e.target.value;
+        const selectedDistrict = districts.find(district => district._id === selectedDistrictId);
+        
+        setFormData({ 
+            ...formData, 
+            district: selectedDistrict ? selectedDistrict.districtname : "",
+            districtId: selectedDistrictId 
+        });
     };
 
     const addInclude = () => setFormData({ ...formData, includes: [...formData.includes, ""] });
@@ -46,7 +61,7 @@ export default function Adddestination() {
         try {
             const response = await finddistrict();
             if (response.data.success) {
-                setDistrict(response.data.datas);
+                setDistricts(response.data.finddistrict); // Changed to setDistricts
             }
         } catch (error) {
             console.log(error);
@@ -57,50 +72,43 @@ export default function Adddestination() {
         finddistricts();
     }, []);
 
-    const formdatas=formData
-    
     const handleSubmit = async (e) => {
-        console.log("hiii");
-        
         e.preventDefault();
-
-       
-    
-    
-      
-
+        
         try {
+            const { destination, duration, description, includes, notIncludes, ticketPrice, district, districtId, selectedImages } = formData;
             const formDataToSend = new FormData();
-            formDataToSend.append("data", JSON.stringify(formdatas));
             
-           
-            // Append images
-            formdatas.selectedImages.forEach((image) => {
-                formDataToSend.append("selectedImages", image);
-            });
-            console.log(formDataToSend,"formDataToSend");
+            formDataToSend.append("data", JSON.stringify({
+                destination, duration, description,
+                includes: includes.filter(item => item.trim() !== ""),
+                notIncludes: notIncludes.filter(item => item.trim() !== ""),
+                ticketPrice, district, districtId
+            }));
+            
+            selectedImages.forEach(image => formDataToSend.append("selectedImages", image));
+            
             const response = await Destinations(formDataToSend);
             if (response.data.success) {
-                toast.success("Values Submitted");
+                toast.success("Destination Added Successfully");
                 setFormData({
-                    destination: "",
-                    duration: "",
-                    description: "",
-                    includes: [""],
-                    notIncludes: [""],
-                    ticketPrice: "",
-                    selectedImages: [],
-                    district: "" // Reset district field
+                    destination: "", duration: "", description: "",
+                    includes: [""], notIncludes: [""], ticketPrice: "",
+                    selectedImages: [], district: "", districtId: ""
                 });
-               
+                navigagte("/admin/finddestination")
             }
         } catch (error) {
-            console.log(error);
+            console.error(error);
             toast.error("Submission failed");
         }
     };
 
     return (
+        <>
+   <div>
+    <AdminNav />
+   </div>
         <div className="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg mt-12">
             <h2 className="text-2xl font-bold mb-4 text-center">Destination Adding Form</h2>
             <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
@@ -146,7 +154,6 @@ export default function Adddestination() {
                     </div>
                 </div>
 
-                {/* Full Width Ticket Price Field */}
                 <div className="">
                     <label className="font-semibold block mb-1">Ticket Price</label>
                     <input
@@ -162,15 +169,17 @@ export default function Adddestination() {
                 <div>
                     <label className="font-semibold block mb-1">District</label>
                     <select
-                        name="district"
-                        value={formData.district}
-                        onChange={handleChange}
+                        name="districtId"
+                        value={formData.districtId}
+                        onChange={handleDistrictChange}
                         className="w-full p-2 border rounded"
                         required
                     >
                         <option value="">Select District</option>
-                        {district.map((item, index) => (
-                            <option key={index} value={item}>{item}</option>
+                        {districts.map((district) => (
+                            <option key={district._id} value={district._id}>
+                                {district.districtname}
+                            </option>
                         ))}
                     </select>
                 </div>
@@ -214,5 +223,6 @@ export default function Adddestination() {
                 <button type="submit" className="col-span-2 w-full bg-blue-600 text-white p-2 rounded">Submit</button>
             </form>
         </div>
+        </>
     );
 }
