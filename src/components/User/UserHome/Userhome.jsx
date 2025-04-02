@@ -1,55 +1,43 @@
 import UserNav from '../Usernav/UserNav';
+import { useState,useEffect } from 'react';
 import Footer from '../Footer/Footer';
 import { useNavigate } from 'react-router-dom';
+import { finddistrict } from '../../../configure/admin';
 export default function Userhome() {
-
+    const [states, setStates] = useState([]);
+  
+const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
   const navigate=useNavigate()
 
 
-  // Dummy data for cards
-  const cards = [
-    {
-      id: 1,
-      image: "../../../../src/assets/Banner.jpg",
-      description: "This is a short description for card nghfdgd udjhgdfgjgh hufddjksk dfgdfgksgsgh hdfgyqguykhjsv hfdsjskgsgkj dhsfksgs sgkgsjg 1."
-    },
-    {
-      id: 2,
-      image: "https://img.freepik.com/free-photo/lone-tree_181624-46361.jpg",
-      description: "This is a short description for card nghfdgd udjhgdfgjgh hufddjksk dfgdfgksgsgh hdfgyqguykhjsv hfdsjskgsgkj dhsfksgs sgkgsjg 1."
-    },
-    {
-      id: 3,
-      image: "https://st.hzcdn.com/simgs/pictures/pools/natural-swimming-pool-by-the-forest-genus-loci-ecological-landscapes-inc-img~a1b1566d0f633eda_14-9300-1-02b659d.jpg",
-      description: "This is a short description for card nghfdgd udjhgdfgjgh hufddjksk dfgdfgksgsgh hdfgyqguykhjsv hfdsjskgsgkj dhsfksgs sgkgsjg 1."
-    },
-    {
-      id: 4,
-      image: "../../../../src/assets/Banner.jpg",
-      description: "This is a short description for card nghfdgd udjhgdfgjgh hufddjksk dfgdfgksgsgh hdfgyqguykhjsv hfdsjskgsgkj dhsfksgs sgkgsjg 1."
-    },
-    {
-      id: 5,
-      image: "https://cdn.experienceandamans.com/images/natural-rock-formation-neil-andaman.jpeg",
-      description: "This is a short description for card nghfdgd udjhgdfgjgh hufddjksk dfgdfgksgsgh hdfgyqguykhjsv hfdsjskgsgkj dhsfksgs sgkgsjg 1."
-    },
-    {
-      id: 6,
-      image: "https://www.thebluekite.com/ckfinder/userfiles/images/15%20Fun%20Things%20To%20Do%20In%20Palolem%20Beach%2C%20South%20Goa%20-%20Trot_World.jpg",
-      description: "This is a short description for card nghfdgd udjhgdfgjgh hufddjksk dfgdfgksgsgh hdfgyqguykhjsv hfdsjskgsgkj dhsfksgs sgkgsjg 1."
-    },
-    {
-      id: 7,
-      image: "https://images.assettype.com/english-sentinelassam/import/wp-content/uploads/2019/08/Kerala.jpg",
-      description: "This is a short description for card nghfdgd udjhgdfgjgh hufddjksk dfgdfgksgsgh hdfgyqguykhjsv hfdsjskgsgkj dhsfksgs sgkgsjg 1."
-    },
-    {
-      id: 8,
-      image: "https://www.wayanad.com/files/slides/2064569462.webp",
-      description: "This is a short description for card nghfdgd udjhgdfgjgh hufddjksk dfgdfgksgsgh hdfgyqguykhjsv hfdsjskgsgkj dhsfksgs sgkgsjg 1."
-    }
-  ];
 
+
+   const findDistrcitandstates = async () => {
+      try {
+        const response = await finddistrict();
+        if (response.data.success) {
+          setStates(response.data.finddistrict);
+          
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = states.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(states.length / itemsPerPage);
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+
+
+    useEffect(() => {
+        findDistrcitandstates();
+      }, []);
+
+  
   return (
     <>
       <UserNav />
@@ -82,22 +70,45 @@ export default function Userhome() {
       </div>
 
       {/* Cards Section */}
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 ">
-          {cards.map((card) => (
-            <div key={card.id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:scale-105">
-              <img
-                src={card.image}
-                alt={card.title}
-                className="w-full h-48 object-cover "
-              />
-              <div className="p-6">
-                <p className="text-gray-600">{card.description}</p>
-              </div>
-            </div>
-          ))}
+        {/* District Cards */}
+<div className="container mx-auto px-4 py-12">
+  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" onClick={()=>navigate("/selectstate")}>
+    {currentItems.map((state) => (
+      <div key={state.id} className="bg-white rounded-md shadow-xl flex flex-col h-full">
+        <img
+          src={`http://localhost:3001/Images/${state.image}`}
+          className="w-full h-48 object-cover overflow-hidden  rounded-md"
+          alt={state.districtname}
+        />
+       
+        <div className="p-4">
+          <p className="text-gray-600">{state.districtdesc}</p>
         </div>
+       
       </div>
+    ))}
+  </div>
+
+  {/* Pagination remains the same */}
+  <div className="flex justify-center mt-8 mb-12">
+    <div className="flex space-x-2">
+      {Array.from({ length: totalPages }, (_, index) => (
+        <button
+          key={index}
+          onClick={() => paginate(index + 1)}
+          className={`w-10 h-10 flex items-center justify-center rounded-md ${
+            currentPage === index + 1
+              ? "bg-black text-white"
+              : "bg-gray-200 text-black hover:bg-gray-300"
+          }`}
+        >
+          {index + 1}
+        </button>
+      ))}
+    </div>
+  </div>
+</div>
+
       <div>
         <Footer/>
       </div>

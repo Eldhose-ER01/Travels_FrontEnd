@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { finddestinations,Destinationdelete } from "../../../configure/admin";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
 
 import AdminNav from "../adminDash/AdminNav";
 
@@ -32,18 +33,18 @@ export default function Destinations() {
     finddatas();
   }, [page, search]);
 
-const DestinationDelete=async(id)=>{
-  try {
-    const response=await Destinationdelete(id)
-    if(response.data.success){
-      setstate(response.data.finddestinations);
-      
+  const DestinationDelete = async (id) => {
+    try {
+      const response = await Destinationdelete(id);  // Passing the id correctly
+      if (response.data.success) {
+        finddatas()
+        toast.success("Destination Deleted")
+      }
+    } catch (error) {
+      console.log(error);
     }
-  } catch (error) {
-    console.log(error);
-    
-  }
-}
+  };
+  
 
   return (
     <>

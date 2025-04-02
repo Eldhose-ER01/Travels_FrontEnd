@@ -70,49 +70,53 @@ export default function SelectStates() {
       </div>
 
       {/* District Cards */}
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {currentItems.map((state) => (
-            <div key={state.id} className="bg-white rounded-md shadow-xl">
-              <img
-                src={`http://localhost:3001/Images/${state.image}`}
-                className="w-full h-48 object-cover overflow-hidden hover:scale-105 rounded-md"
-                alt={state.districtname}
-              />
-              <div className='text-center mt-2 text-xl font-semibold'>
-                {state.districtname}
-              </div>
-              <div className="p-4 mb-2">
-                <p className="text-gray-600">{state.districtdesc}</p>
-              </div>
-              <div className='flex flex-wrap justify-center mb-6'>
-                <button className='w-60 h-12 bg-black text-white font-semibold hover:bg-green-400 hover:text-black' onClick={() => Navigate('/destinations', { state: { district: state.districtname } })}>
-                  Select Now
-                </button>
-              </div>
-            </div>
-          ))}
+    {/* District Cards */}
+<div className="container mx-auto px-4 py-12">
+  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    {currentItems.map((state) => (
+      <div key={state.id} className="bg-white rounded-md shadow-xl flex flex-col h-full">
+        <img
+          src={`http://localhost:3001/Images/${state.image}`}
+          className="w-full h-48 object-cover overflow-hidden hover:scale-105 rounded-md"
+          alt={state.districtname}
+        />
+        <div className='text-center mt-2 text-xl font-semibold'>
+          {state.districtname}
         </div>
-
-        {/* Pagination */}
-        <div className="flex justify-center mt-8 mb-12">
-          <div className="flex space-x-2">
-            {Array.from({ length: totalPages }, (_, index) => (
-              <button
-                key={index}
-                onClick={() => paginate(index + 1)}
-                className={`w-10 h-10 flex items-center justify-center rounded-md ${
-                  currentPage === index + 1
-                    ? "bg-black text-white"
-                    : "bg-gray-200 text-black hover:bg-gray-300"
-                }`}
-              >
-                {index + 1}
-              </button>
-            ))}
-          </div>
+        <div className="p-4">
+          <p className="text-gray-600">{state.districtdesc}</p>
+        </div>
+        <div className='mt-auto p-4'> {/* This pushes the button to the bottom */}
+          <button 
+            className='w-full h-12 bg-black text-white font-semibold hover:bg-green-400 hover:text-black rounded-md'
+            onClick={() => Navigate('/destinations', { state: { district: state.districtname } })}
+          >
+            Select Now
+          </button>
         </div>
       </div>
+    ))}
+  </div>
+
+  {/* Pagination remains the same */}
+  <div className="flex justify-center mt-8 mb-12">
+    <div className="flex space-x-2">
+      {Array.from({ length: totalPages }, (_, index) => (
+        <button
+          key={index}
+          onClick={() => paginate(index + 1)}
+          className={`w-10 h-10 flex items-center justify-center rounded-md ${
+            currentPage === index + 1
+              ? "bg-black text-white"
+              : "bg-gray-200 text-black hover:bg-gray-300"
+          }`}
+        >
+          {index + 1}
+        </button>
+      ))}
+    </div>
+  </div>
+</div>
 
       <Footer />
     </>

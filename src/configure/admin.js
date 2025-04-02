@@ -134,7 +134,7 @@ export const editdestination=async(data)=>{
 
 export const Destinationdelete=async(id)=>{
     try {
-        const response=await adminAxiosInstance.post('/deletedestination',{id})
+        const response=await adminAxiosInstance.post(`/deletedestination?id=${id}`)
         return response
     } catch (error) {
         console.log(error);

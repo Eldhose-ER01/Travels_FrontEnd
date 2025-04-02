@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { StateBlockORUnblock, findStateandDistrict, StateandDisrictDelete } from "../../../configure/admin";
 import AdminNav from "../adminDash/AdminNav";
+import { toast } from 'react-toastify';
+
 
 export default function FindStateDistricts() {
   const [States, setStates] = useState([]);
@@ -44,6 +46,9 @@ export default function FindStateDistricts() {
       const response = await StateandDisrictDelete(id);
       if (response.data.success) {
         setStates(response.data.Statedata);
+        toast.success("State Deleted")
+        
+        
       }
     } catch (error) {
       console.log(error);
