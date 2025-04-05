@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import AdminNav from "../adminDash/AdminNav";
 import { finddistrict, editdestination } from "../../../configure/admin";
 import { toast } from 'react-toastify';
-
+import { userApi } from '../../../configure/api';
 export default function EditDestination() {
     const location = useLocation();
     const destinations = location.state || {};
@@ -90,7 +90,7 @@ export default function EditDestination() {
             if (image.startsWith('http')) {
                 return image;
             }
-            return `http://localhost:3001/Images/${image}`;
+            return `${userApi}/Images/${image}`;
         } else if (image instanceof File) {
             return URL.createObjectURL(image);
         }
@@ -119,7 +119,7 @@ export default function EditDestination() {
             // Separate existing images (strings) from new images (File objects)
             const existingImages = destination.selectedImages
                 .filter(img => typeof img === 'string')
-                .map(img => img.replace('http://localhost:3001/Images/', ''));
+                .map(img => img.replace(`${userApi}/Images/`, ''));
             
             formData.append('existingImages', JSON.stringify(existingImages));
             

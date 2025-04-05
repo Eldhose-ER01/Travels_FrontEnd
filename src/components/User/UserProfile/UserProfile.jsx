@@ -77,7 +77,7 @@ export default function UserProfile() {
             
             {/* Action Buttons */}
             <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <button className="px-6 py-3 bg-black hover:bg-green-500 text-red-500 hover:text-black font-medium rounded-md shadow-sm transition duration-150 ease-in-out">
+              <button className="px-6 py-3 bg-black hover:bg-green-500 text-red-500 hover:text-black font-medium rounded-md shadow-sm transition duration-150 ease-in-out"onClick={()=>Navigate('/bookingview')}>
                 Booking History
               </button>
               <button className="px-6 py-3 bg-sky-600 hover:bg-green-500 text-white font-medium rounded-md shadow-sm transition duration-150 ease-in-out">

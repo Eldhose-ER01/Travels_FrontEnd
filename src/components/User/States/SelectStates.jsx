@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import UserNav from '../Usernav/UserNav';
 import Footer from '../Footer/Footer';
+import { userApi } from '../../../configure/api';
 import { finddistrict } from '../../../configure/admin';
 import { useNavigate } from 'react-router-dom';
 export default function SelectStates() {
@@ -76,7 +77,7 @@ export default function SelectStates() {
     {currentItems.map((state) => (
       <div key={state.id} className="bg-white rounded-md shadow-xl flex flex-col h-full">
         <img
-          src={`http://localhost:3001/Images/${state.image}`}
+          src={`${userApi}/Images/${state.image}`}
           className="w-full h-48 object-cover overflow-hidden hover:scale-105 rounded-md"
           alt={state.districtname}
         />

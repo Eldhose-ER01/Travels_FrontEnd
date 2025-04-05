@@ -103,6 +103,48 @@ const Editprofile=async(data)=>{
 
   }
 }
+
+/*-------------------------Bookingsdatas-------------------------*/
+const Bookingsdatas = async (data) => {
+  try {
+    const response = await userAxiosInstance.post("/create-checkout-session", {
+      data,
+    });
+    return response;
+  } catch (error) {
+    console.log(error.message, "error form front");
+  }
+};
+
+const WalletAmounts=async()=>{
+  try {
+    const response=await userAxiosInstance.get("/walletamount")
+  return response
+  } catch (error) {
+    console.log(error.message, "error form front");
+  }
+  
+}
+
+const FindBookings=async()=>{
+  try {
+    const response=await userAxiosInstance.get("/findbooking")
+  return response
+  } catch (error) {
+    console.log(error.message, "error form front");
+  }
+  
+}
+
+const CanelBooking=async(id)=>{
+try {
+  const response=await userAxiosInstance.post(`/bookingcancel?id=${id}`)
+  return response
+} catch (error) {
+  console.log(error);
+  
+}
+}
   export{
     userSignup,
     Otpform,
@@ -114,5 +156,9 @@ const Editprofile=async(data)=>{
     googleLogin,
     destinationpoint,
     userProfile,
-    Editprofile
+    Editprofile,
+    Bookingsdatas,
+    WalletAmounts,
+    FindBookings,
+    CanelBooking
   }

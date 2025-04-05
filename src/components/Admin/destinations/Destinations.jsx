@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { finddestinations,Destinationdelete } from "../../../configure/admin";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
-
+import { userApi } from '../../../configure/api';
 import AdminNav from "../adminDash/AdminNav";
 
 export default function Destinations() {
@@ -130,13 +130,13 @@ export default function Destinations() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <img
-                          src={`http://localhost:3001/Images/${states.selectedImages[0]}`}
+                          src={`${userApi}/Images/${states.selectedImages[0]}`}
                           alt={states.destination}
                           className="w-24 h-16 object-cover rounded"
                         />
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-600 font-medium">
-                        ${states.ticketPrice}
+                      ₹{states.ticketPrice}
                       </td>
                      
                       <td className="px-6 py-4 whitespace-nowrap text-sm">

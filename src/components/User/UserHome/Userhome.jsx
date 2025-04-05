@@ -3,6 +3,7 @@ import { useState,useEffect } from 'react';
 import Footer from '../Footer/Footer';
 import { useNavigate } from 'react-router-dom';
 import { finddistrict } from '../../../configure/admin';
+import { userApi } from '../../../configure/api';
 export default function Userhome() {
     const [states, setStates] = useState([]);
   
@@ -56,7 +57,7 @@ const [currentPage, setCurrentPage] = useState(1);
         </div>
 
         {/* Centered Content and Booking Button */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center px-4">
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-white mt-6 sm:mt-0 text-center px-4">
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
             Welcome to Our Service
           </h1>
@@ -76,7 +77,7 @@ const [currentPage, setCurrentPage] = useState(1);
     {currentItems.map((state) => (
       <div key={state.id} className="bg-white rounded-md shadow-xl flex flex-col h-full">
         <img
-          src={`http://localhost:3001/Images/${state.image}`}
+          src={`${userApi}/Images/${state.image}`}
           className="w-full h-48 object-cover overflow-hidden  rounded-md"
           alt={state.districtname}
         />

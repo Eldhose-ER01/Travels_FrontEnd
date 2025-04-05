@@ -142,3 +142,23 @@ export const Destinationdelete=async(id)=>{
    
 }
 
+export const findbookingdata=async()=>{
+    try {
+      const response=await adminAxiosInstance.get(`/getbookingdatas`)
+      return response
+    } catch (error) {
+      console.log(error);
+      
+    }
+    }
+
+export const CompleteBooking=async(id)=>{
+try {
+  const response=await adminAxiosInstance.post(`/bookingcomplete?id=${id}`)
+  return response
+} catch (error) {
+  console.log(error);
+  
+}
+}
+

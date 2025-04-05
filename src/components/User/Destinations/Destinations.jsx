@@ -1,5 +1,6 @@
 import UserNav from '../Usernav/UserNav';
 import Footer from '../Footer/Footer';
+import { userApi } from '../../../configure/api';
 import { FaCheck, FaTimes, FaClock, FaRupeeSign } from 'react-icons/fa';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { destinationpoint } from '../../../configure/user';
@@ -57,7 +58,7 @@ export default function Destinations() {
                   >
                     {destination.selectedImages.map((image, index) => (
                       <SwiperSlide key={index}>
-                        <img src={`http://localhost:3001/Images/${image}`} alt="" className="w-full h-full object-cover rounded-md" />
+                        <img src={`${userApi}/Images/${image}`} alt="" className="w-full h-full object-cover rounded-md" />
                       </SwiperSlide>
                     ))}
                   </Swiper>

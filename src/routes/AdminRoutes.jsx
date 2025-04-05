@@ -9,10 +9,14 @@ import Destinations from '../pages/Admin/Destinations'
 import Finddestinations from '../pages/Admin/Finddestinations'
 import ProtectedAdminRoute from './ProtectAdminRoute'
 import Editdestination from '../pages/Admin/Editdestination'
+import ViewBooking from '../pages/Admin/ViewBooking'
+import Error404 from '../components/Error/Error404'
+import Error500 from '../components/Error/Error500'
 export default function Adminroutes() {
   return (
     <div>
       <Routes>
+      <Route path="/*" element={<Error404 />} />
         <Route path='/login' element={<AdminLogin/>}/>
         <Route element={<ProtectedAdminRoute/>}>
   
@@ -25,7 +29,10 @@ export default function Adminroutes() {
         <Route path='/destinations'element={<Destinations/>}/>
         <Route path='/finddestination'element={<Finddestinations/>}/>
         <Route path='/editdestination'element={<Editdestination/>}/>
+        <Route path='/bookingview'element={<ViewBooking/>}/>
         </Route>
+        <Route path="/error404" element={<Error404 />} />
+        <Route path="/error500" element={<Error500 />} />
       </Routes>
     </div>
   )

@@ -20,9 +20,9 @@ const UserNav = () => {
     navigate('/login')
   }
   return (
-    <nav className="bg-white shadow-xl">
+    <nav className="bg-white shadow-xl z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-24">
+        <div className="flex justify-between h:20 sm:h-24">
           {/* Left Side: Menu Icon (Mobile) */}
           <div className="flex items-center md:hidden">
             <button
@@ -40,7 +40,7 @@ const UserNav = () => {
           {/* Center: Logo */}
           <div className="flex-shrink-0 flex items-center">
             <span className="text-xl font-bold text-gray-800">
-              <img className='w-24' src="../../../../src/assets/Screenshot 2025-03-20 161642-Photoroom.png" alt="" />
+              <img className='w-20 sm:w-24' src="../../../../src/assets/Screenshot 2025-03-20 161642-Photoroom.png" alt="" />
             </span>
           </div>
 

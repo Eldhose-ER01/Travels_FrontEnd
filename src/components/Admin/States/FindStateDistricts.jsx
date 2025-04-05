@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { StateBlockORUnblock, findStateandDistrict, StateandDisrictDelete } from "../../../configure/admin";
 import AdminNav from "../adminDash/AdminNav";
 import { toast } from 'react-toastify';
-
+import { userApi } from '../../../configure/api';
 
 export default function FindStateDistricts() {
   const [States, setStates] = useState([]);
@@ -143,7 +143,7 @@ export default function FindStateDistricts() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <img 
-                          src={`http://localhost:3001/Images/${states.image}`} 
+                          src={`${userApi}/Images/${states.image}`} 
                           alt={states.statename}
                           className="w-24 h-16 object-cover rounded"
                         />
